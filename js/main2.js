@@ -75,7 +75,7 @@ var loc1 = {
 };
 var loca;
 var markers = [];
-var model1 = [];
+//var model1 = [];
 //var m = new model();
 //vm = new ViewModel(m);
 var ViewModel = function(){
@@ -101,21 +101,23 @@ var ViewModel = function(){
             for(var i=0; i < 10; i++) {
                 self.restaurants.push(model1[i]);
             }
+            add_markers_to_map(model1);
         },3000);
 
     }
     this.showinfo = function(current){
         self.currentrestaurant = current;
-        markers[current.id-1].setIcon(clickedIcon);
-        populateInfoWindow(markers[current.id-1],largeInfoWindow);
+        console.log("clicked on "+ current.name);
+        //markers[current.id-1].setIcon(clickedIcon);
+        populateInfoWindow(markers[self.currentrestaurant.id],largeInfoWindow);
     };
     this.search = function(value){
         self.restaurants.removeAll();
-        for (var i in self.arr1){
+        for (var i in model1){
             markers[i].setMap(null);
 
-            if(self.arr1[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-                self.restaurants.push(self.arr1[i]);
+            if(model1[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                self.restaurants.push(model1[i]);
                 markers[i].setMap(map);
                 //populateInfoWindow()
             }
@@ -138,12 +140,16 @@ function  initMap(){
         center: {lat: 0, lng: 0},
         zoom: 2
         });
-    //bounds = new google.maps.LatLngBounds();
+    bounds = new google.maps.LatLngBounds();
+
     largeInfoWindow = new google.maps.InfoWindow();
     defaultIcon = makeMarkerIcon('a82848');
     highlightedIcon = makeMarkerIcon('ed4b74');
     clickedIcon = makeMarkerIcon('f79336');
+    bounds = new google.maps.LatLngBounds();
+
     //for (var category in m.categories) {
+
         //add_markers_to_map(m.categories.restaurants, m.categories);
     //}
     //console.log(bounds);
@@ -154,9 +160,12 @@ populateInfoWindow = function(marker, infowindow){
     //console.log(marker.position);
     if( infowindow.marker != marker){
         infowindow.marker = marker;
-        infowindow.setContent('<div class="InfoWindow">' +  '<h2 class="name">' + marker.title + '</h2>' + '<span class ="info" >'+ marker.info + '</span>'+ marker.img + '</div>');
+        infowindow.setContent('<div class="InfoWindow">' +  '<h2 class="name">' + marker.title + '</h2>' + '<span class ="info" >'+ marker.info + '</span>'+ '<img src="'+marker.img+'"' + '</div>');
         infowindow.open(map, marker);
     }
+    infowindow.addListener('closeclick',function(){
+        marker.setIcon();
+    });
 }
 function makeMarkerIcon(markerColor) {
   var markerImage = new google.maps.MarkerImage(
@@ -169,6 +178,8 @@ function makeMarkerIcon(markerColor) {
   return markerImage;
 }
 add_markers_to_map = function(category){
+
+    console.log(category[0].location);
     for( var i = 0; i< category.length ; i++) {
         marker = new google.maps.Marker({
             position: category[i].location,
@@ -181,9 +192,9 @@ add_markers_to_map = function(category){
             //label: type,
         });
         markers.push(marker);
-        bounds.extend(marker.position);
+        //bounds.extend(marker.position);
         markers[i].setMap(map);
-        bounds.extend(markers[i].position);
+        //bounds.extend(markers[i].position);
         marker.addListener('click',function(){
         //infowindow.open(map, marker);
             this.setIcon(clickedIcon);
@@ -193,11 +204,9 @@ add_markers_to_map = function(category){
         marker.addListener('mouseover',function(){
             //console.log("hovering");
             this.setIcon(highlightedIcon);
-            setTimeout(function(){
+            });
+        };
 
-            })
-        })
-    }
 };
 
 
