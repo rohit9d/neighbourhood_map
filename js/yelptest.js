@@ -1,7 +1,6 @@
 //var m1 = new model();
 
 //console.log(m1.categories.restaurants[1].name);
-var model1 = [];
 
 function yelp(loc){
   console.log("inside yelp");
@@ -30,11 +29,12 @@ function yelp(loc){
             loc1.lat = results.region.center.latitude;
             loc1.lng = results.region.center.longitude;
             map.setCenter(loc1);
-            map.setZoom(8);
+            map.setZoom(14);
             change_model(results);
         },
         error: function() {
           // Do stuff on fail
+          console.log("please select another location");
         }
     };
 
@@ -49,23 +49,10 @@ function nonce_generate() {
 function change_model(results){
     var stores = results.businesses;
     var st ={'name': ' ','info': ' ','img': ' ','location': { 'lat': ' ', 'lng' : ' '}, 'id': 0};
-
-    for(var i=0; i<10 ; i++) {
-        //console.log(results.businesses[i].name);
-        st.name = stores[i].name;
-        st.info = stores[i].snippet_text;
-        st.img = stores[i].image_url;
-        st.address = stores[i].location.address;
-        st.location.lat = stores[i].location.coordinate.latitude;
-        st.location.lng = stores[i].location.coordinate.longitude;
-        st.id = i;
-        //console.log(st);
-        model1.push(st);
-        //console.log(model1.stores[2].name);
-        console.log(model1[i].name);
-
+    //var m = [];
+    for(var i=0; i<20 ; i++) {
+        model1.push({'name': stores[i].name, 'info': stores[i].snippet_text, 'img': stores[i].image_url, 'location': {'lat': stores[i].location.coordinate.latitude , 'lng': stores[i].location.coordinate.longitude}, 'id': i});
     }
-    console.log(model1[8].name);
 
 };
 //yelp();

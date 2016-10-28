@@ -1,81 +1,14 @@
-/*var model = function(){
-    this.categories = {
-        'restaurants' :[{
-            'name' : 'dominoes',
-            'location' : {
-                lat: -30.20,
-                lng: 150.644
-            },
-            'id': 1,
-            'img': '<img class = "rest_image" src="images/dom.jpg">',
-            'info' : 'One of the deliciou spizzas are served here!!'
-        }, {
-            'name' : 'Tea-time',
-            'location' : {
-                lat: -31.20,
-                lng: 150.644
-            },
-            'id': 2,
-            'img': '<img class = "rest_image"  src="images/teatime.jpg">',
-            'info' : 'Tired?? Stop here for a perfect tea.'
-        }, {
-            'name' : 'Oven-hot',
-            'location' : {
-                lat: -32.20,
-                lng: 150.644
-            },
-            'id': 3,
-            'img': '<img class = "rest_image"  src="images/ovenhot.jpg">',
-            'info' : 'Hungry!! Stop here for delicious mouth watering snacks'
-
-        }, {
-            'name' : 'Eifel juices',
-            'location' : {
-                lat: -33.20,
-                lng: 150.644
-            },
-            'id': 4,
-            'img': '<img class = "rest_image"  src="images/eiffel.jpg">',
-            'info' : 'Thirsty?? grab yourself some of their delicious juices'
-
-        }, {
-            'name' : 'Mac Donald',
-            'location' : {
-                lat: -34.20,
-                lng: 146.644
-            },
-            'id': 5,
-            'img': '<img class = "rest_image"  src="images/macd.jpg">',
-            'info' : 'Grab yourself a big Mac Burger filled with some extra cheese '
-
-        }, {
-            'name' : 'Pizza Hut',
-            'location' : {
-                lat: -34.20,
-                lng: 147.644
-            },
-            'id': 6,
-            'img': '<img class = "rest_image"  src="images/pizzahut.jpg">',
-            'info' : 'Stop here if you dont want to eat shitty pizza somewhere else '
-
-        }]
-    }
-
-};
-
-*/
-
-//var vm = new ViewModel();
-//vm.query.subscribe(vm.search);
-//ko.applyBindings(vm);
 var map,bounds,vm,largeInfoWindow,defaultIcon,highIcon,clickIcon,marker,yelp_parameters,encodedSignature,settings,finish;
 var loc1 = {
     'lat': '',
     'lng':''
 };
+var hover = false;
+var click = false;
+
 var loca;
 var markers = [];
-//var model1 = [];
+var model1 = [];
 //var m = new model();
 //vm = new ViewModel(m);
 var ViewModel = function(){
@@ -95,31 +28,25 @@ var ViewModel = function(){
     this.currentrestaurant = ko.observable();
     this.changelocation = function(value){
         yelp(value);
-
-        //console.log(finish);
         setTimeout(function(){
-            for(var i=0; i < 10; i++) {
+            for(var i=0; i < model1.length; i++) {
                 self.restaurants.push(model1[i]);
             }
             add_markers_to_map(model1);
         },3000);
-
     }
     this.showinfo = function(current){
         self.currentrestaurant = current;
         console.log("clicked on "+ current.name);
-        //markers[current.id-1].setIcon(clickedIcon);
         populateInfoWindow(markers[self.currentrestaurant.id],largeInfoWindow);
     };
     this.search = function(value){
         self.restaurants.removeAll();
         for (var i in model1){
             markers[i].setMap(null);
-
             if(model1[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 self.restaurants.push(model1[i]);
                 markers[i].setMap(map);
-                //populateInfoWindow()
             }
         }
 
@@ -132,7 +59,7 @@ var vm = new ViewModel();
 vm.query.subscribe(vm.search);
 vm.mylocation.subscribe(vm.changelocation);
 ko.applyBindings(vm);
-
+mapdiv = $("#map");
 //global funcitons
 function  initMap(){
     //var m = new model();
@@ -148,24 +75,23 @@ function  initMap(){
     clickedIcon = makeMarkerIcon('f79336');
     bounds = new google.maps.LatLngBounds();
 
-    //for (var category in m.categories) {
-
-        //add_markers_to_map(m.categories.restaurants, m.categories);
-    //}
-    //console.log(bounds);
-    //map.fitBounds(bounds);
 };
 
 populateInfoWindow = function(marker, infowindow){
-    //console.log(marker.position);
     if( infowindow.marker != marker){
+    console.log(marker.position);
+
         infowindow.marker = marker;
         infowindow.setContent('<div class="InfoWindow">' +  '<h2 class="name">' + marker.title + '</h2>' + '<span class ="info" >'+ marker.info + '</span>'+ '<img src="'+marker.img+'"' + '</div>');
         infowindow.open(map, marker);
+
     }
     infowindow.addListener('closeclick',function(){
         marker.setIcon();
+        infowindow.close();
+        click = false;
     });
+
 }
 function makeMarkerIcon(markerColor) {
   var markerImage = new google.maps.MarkerImage(
@@ -179,7 +105,7 @@ function makeMarkerIcon(markerColor) {
 }
 add_markers_to_map = function(category){
 
-    console.log(category[0].location);
+    //console.log(category[0].location);
     for( var i = 0; i< category.length ; i++) {
         marker = new google.maps.Marker({
             position: category[i].location,
@@ -192,20 +118,31 @@ add_markers_to_map = function(category){
             //label: type,
         });
         markers.push(marker);
-        //bounds.extend(marker.position);
+        bounds.extend(marker.position);
         markers[i].setMap(map);
-        //bounds.extend(markers[i].position);
+        bounds.extend(markers[i].position);
         marker.addListener('click',function(){
-        //infowindow.open(map, marker);
             this.setIcon(clickedIcon);
-            // this.setIcon(clickedIcon);
+            click = true;
+            console.log("clicking on marker");
             populateInfoWindow(this, largeInfoWindow);
         });
         marker.addListener('mouseover',function(){
-            //console.log("hovering");
-            this.setIcon(highlightedIcon);
-            });
-        };
+            if(click == false) {
+                this.setIcon(highlightedIcon);
+                hover = true;
+            }
+
+        });
+        marker.addListener('mouseout',function(){
+            if(click !=true){
+                this.setIcon();
+                hover = false;
+            }
+        });
+        map.fitBounds(bounds);
+    };
+        //console.log(markers);
 
 };
 

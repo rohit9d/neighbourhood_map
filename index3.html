@@ -3,15 +3,20 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/style1.css">
     <title>My neighbourhood</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <header>
-     <a href="#" id="menu"><img class= "icon" src="images/humburger.svg"></a>
-     <h2>where do you want to move?</h2>
+     <div class ="firsthalf"><img id = "menu" src="images/humburger.svg"></div>
+     <div class="secondhalf">
      <input data-bind = "value: mylocation" type="text" >
+
+     <span class="header_text">where do you want to move?</span>
+
+     </div>
 </header>
 <div class="sidebar">
-<h1>Locations</h1>
+<h4>Search for restaurants</h4>
     <input id= "searchbar" data-bind= "value: query, valueUpdate: 'keyup'" autocomplete="off" type="text">
     <ul id="list" data-bind="foreach: restaurants">
         <li data-bind = "text: name, click: $parent.showinfo"></li>
