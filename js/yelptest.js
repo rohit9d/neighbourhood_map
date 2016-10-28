@@ -3,7 +3,7 @@
 //console.log(m1.categories.restaurants[1].name);
 
 function yelp(loc){
-  console.log("inside yelp");
+
     var yelp_url = 'https://api.yelp.com/v2/search?';
     var parameters = {
         oauth_consumer_key: 'xCCtCzq4GT7uNMZnMjDxOA',
@@ -29,12 +29,13 @@ function yelp(loc){
             loc1.lat = results.region.center.latitude;
             loc1.lng = results.region.center.longitude;
             map.setCenter(loc1);
-            map.setZoom(14);
+            map.setZoom(15);
             change_model(results);
+            //clearTimeout(yelp_request);
         },
         error: function() {
           // Do stuff on fail
-          console.log("please select another location");
+          model1.push({'name': "OOPS THERE'S sOME PROBLEM EITHER WITH YOUR LOCATION OR OUR SERVERS.PLEASE TRY AGAIN" });
         }
     };
 
@@ -48,8 +49,6 @@ function nonce_generate() {
 };
 function change_model(results){
     var stores = results.businesses;
-    var st ={'name': ' ','info': ' ','img': ' ','location': { 'lat': ' ', 'lng' : ' '}, 'id': 0};
-    //var m = [];
     for(var i=0; i<20 ; i++) {
         model1.push({'name': stores[i].name, 'info': stores[i].snippet_text, 'img': stores[i].image_url, 'location': {'lat': stores[i].location.coordinate.latitude , 'lng': stores[i].location.coordinate.longitude}, 'id': i});
     }
