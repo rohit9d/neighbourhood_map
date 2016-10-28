@@ -3,6 +3,7 @@ var loc1 = {
     'lat': '',
     'lng':''
 };
+var empty =false;
 var hover = false;
 var click = false;
 var loca;
@@ -26,12 +27,17 @@ var ViewModel = function(){
         var i =0;
         console.log(markers.length);
         //emptying the markers array and model array on change of location to avoid previous markers
-        while(i < markers.length){
+        while(i < markers.length && empty == false){
+            console.log("emptying");
             markers[i].setMap(null);
-            markers.pop();
-            model1.pop();
+            markers[i]= {};
+            model1[i]= {};
+            //empty= true
+            //markers.pop();
+            //model1.pop();
             i++;
         };
+        empty = true;
         // i can still see my previous contents here despite of emptying it but even though length is 20 only 10 markers remain in my array
         console.log(markers[9]);
         console.log(model1[9]);
@@ -112,8 +118,11 @@ function makeMarkerIcon(markerColor) {
   return markerImage;
 }
 add_markers_to_map = function(category){
+    empty= false;
 
+    console.log("adding markers to map");
     for( var i = 0; i< category.length ; i++) {
+        console.log("adding markers");
         marker = new google.maps.Marker({
             position: category[i].location,
             map: map,
@@ -123,7 +132,8 @@ add_markers_to_map = function(category){
             info: category[i].info,
             img: category[i].img
         });
-        markers.push(marker);
+        markers[i]=marker;
+        //console.log(markers[i]);
         bounds.extend(marker.position);
         markers[i].setMap(map);
         bounds.extend(markers[i].position);

@@ -50,7 +50,7 @@ function nonce_generate() {
 function change_model(results){
     var stores = results.businesses;
     for(var i=0; i<20 ; i++) {
-        model1.push({'name': stores[i].name, 'info': stores[i].snippet_text, 'img': stores[i].image_url, 'location': {'lat': stores[i].location.coordinate.latitude , 'lng': stores[i].location.coordinate.longitude}, 'id': i});
+        model1[i] = {'name': stores[i].name, 'info': stores[i].snippet_text, 'img': stores[i].image_url, 'location': {'lat': stores[i].location.coordinate.latitude , 'lng': stores[i].location.coordinate.longitude}, 'id': i};
     }
 
 };
