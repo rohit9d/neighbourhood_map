@@ -1,44 +1,42 @@
-html,body{
+html,
+body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
 }
-body{
+body {
     display: inline-flex;
     flex-wrap: wrap;
 }
-header{
+header {
     width: 100%;
     background-color: #0a7ea1;
     height: 9%;
     display: flex;
     flex-wrap: wrap;
-
 }
-
-
-#menu{
+#menu {
     height: 100%;
     cursor: pointer;
 }
-.InfoWindow{
+.InfoWindow {
     width: 100%;
 }
-.info{
+.info {
     max-width: 200px;
     padding: 0;
     display: inline-block;
     vertical-align: top;
 }
-ul{
+ul {
     padding: 0;
 }
-.header_text{
+.header_text {
     font-size: 2.8vw;
     width: 60%;
 }
-li{
+li {
     list-style: none;
     line-height: 2em;
     font-size: 1em;
@@ -46,35 +44,37 @@ li{
     border: 2px solid #24323e;
     margin-bottom: 3px;
     background-color: #24323e;
-
 }
-input{
+input {
     padding: 10px;
-    margin: 2%;
     border: none;
     border-bottom: solid 2px #c9c9c9;
     transition: border 0.3s;
     width: 30%;
 }
-.firsthalf{
+.firsthalf {
     width: 30%;
+    top: 2% position: absolute;
+    left: 0;
 }
-.secondhalf{
+.secondhalf {
     width: 70%;
-
+    position: absolute;
+    right: 0;
+    top: 2%;
 }
-#searchbar{
+#searchbar {
     margin: 5%;
     width: 80%;
     padding: 0;
 }
-.visible{
+.visible {
     display: block;
 }
-.sidebar{
+.sidebar {
     position: absolute;
     z-index: 1000;
-    transform: translate(-1000px,0);
+    transform: translate(-1000px, 0);
     color: white;
     background-color: #2e3d49;
     width: 30%;
@@ -84,10 +84,16 @@ input{
     overflow-x: hidden;
     text-align: center;
 }
-.open{
-    transform: translate(0,0);
+.open {
+    transform: translate(0, 0);
 }
-#map{
+#map {
     width: 1000%;
     height: 91%;
+    overflow: hidden;
+    position: relative;
 }
+@media (min-width: 900px) {
+    .secondhalf {
+        top: 1%;
+    }
