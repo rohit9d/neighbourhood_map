@@ -31,8 +31,9 @@ function yelp(loc) {
         },
         error: function() {
             // Do stuff on fail
+            document.getElementById("map").innerHTML = "<img src='images/Error.jpg'>"
             model1.push({
-                'name': "OOPS THERE'S sOME PROBLEM EITHER WITH YOUR LOCATION OR OUR SERVERS.PLEASE TRY AGAIN"
+                'name': "OOPS THERE'S SOME PROBLEM EITHER WITH YOUR LOCATION OR OUR SERVERS.PLEASE TRY AGAIN"
             });
         }
     };

@@ -11,22 +11,21 @@ var markers = [];
 var model1 = [];
 var ViewModel = function() {
     var menu = $('#menu');
-    var sidebar = $('.sidebar')
+    var sidebar = $('.sidebar');
     //hamburgar menu
     menu.click(function() {
         sidebar.toggleClass('open');
     });
     var self = this;
-    this.query = ko.observable('');
-    this.mylocation = ko.observable('Enter a location');
-    this.restaurants = ko.observableArray([]);
-    this.currentrestaurant = ko.observable();
-    this.changelocation = function(value) {
+    self.query = ko.observable('');
+    self.mylocation = ko.observable('Enter a location');
+    self.restaurants = ko.observableArray([]);
+    self.currentrestaurant = ko.observable();
+    self.changelocation = function(value) {
         self.restaurants.removeAll();
         var i = 0;
         //emptying the markers array and model array on change of location to avoid previous markers
         while (i < markers.length && empty == false) {
-            console.log("emptying");
             markers[i].setMap(null);
             markers[i] = {};
             model1[i] = {};
@@ -51,7 +50,14 @@ var ViewModel = function() {
     }
     this.showinfo = function(current) {
         self.currentrestaurant = current;
+        var i=0;
+        while(i< markers.length){
+            markers[i].setIcon();
+            i++;
+        }
+        markers[self.currentrestaurant.id].setIcon(clickedIcon);
         populateInfoWindow(markers[self.currentrestaurant.id], largeInfoWindow);
+
     };
     // filter restaurants acoording to search and display markers accordingly
     this.search = function(value) {
@@ -61,6 +67,7 @@ var ViewModel = function() {
             if (model1[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 //push restaurants matched to value and corresponding markers
                 self.restaurants.push(model1[i]);
+                //ko.utils.arrayFilter(model1)
                 markers[i].setMap(map);
             }
         }
@@ -75,6 +82,9 @@ ko.applyBindings(vm);
 mapdiv = $("#map");
 
 //global funcitons
+function googleError(){
+    document.getElementById("map").innerHTML = "<img src='images/Error.jpg'>"
+}
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
@@ -141,10 +151,19 @@ add_markers_to_map = function(restaurant) {
         markers[i].setMap(map);
         bounds.extend(markers[i].position);
         marker.addListener('click', function() {
-            this.setIcon(clickedIcon);
-            click = true;
+            //using hover to avoid marker getting reset on hover after click
+            if(hover != false) {
+                var i=0;
+                while(i< markers.length){
+                    markers[i].setIcon();
+                    i++;
+                }
+                this.setIcon(clickedIcon);
+                click= true;
+            }
             populateInfoWindow(this, largeInfoWindow);
         });
+        //hover changes color only if that marker is not clicked
         marker.addListener('mouseover', function() {
             if (click == false) {
                 this.setIcon(highlightedIcon);
@@ -155,7 +174,6 @@ add_markers_to_map = function(restaurant) {
         marker.addListener('mouseout', function() {
             if (click != true) {
                 this.setIcon();
-                hover = false;
             }
         });
         map.fitBounds(bounds);
