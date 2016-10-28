@@ -47,6 +47,8 @@ var ViewModel = function(){
                 for(var i=0; i < model1.length; i++) {
                     self.restaurants.push(model1[i]);
                 }
+                bounds = new google.maps.LatLngBounds();
+
                 add_markers_to_map(model1);
             },3000);
         }
@@ -83,13 +85,11 @@ function  initMap(){
         center: {lat: 0, lng: 0},
         zoom: 2
         });
-    bounds = new google.maps.LatLngBounds();
 
     largeInfoWindow = new google.maps.InfoWindow();
     defaultIcon = makeMarkerIcon('a82848');
     highlightedIcon = makeMarkerIcon('ed4b74');
     clickedIcon = makeMarkerIcon('f79336');
-    bounds = new google.maps.LatLngBounds();
 
 };
 
@@ -157,6 +157,7 @@ add_markers_to_map = function(category){
             }
         });
         map.fitBounds(bounds);
+        //bounds = null;
     };
 };
 
