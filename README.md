@@ -13,4 +13,10 @@ USing grunt to minify css and js
 2.install dependencies with npm install.
 3.Run grunt (functions and tasks for minifying css and js are already defined in gruntfile.js)
 
+Add libraries using bower
+1.npm install bower
+2.bower install jquery
+3.bower install oauth_signature
+
+Download knockout.js from http://knockoutjs.com/downloads or install using bower install knockout
 
