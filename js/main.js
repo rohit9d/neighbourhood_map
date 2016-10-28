@@ -1,4 +1,4 @@
-var map, bounds, vm, largeInfoWindow, defaultIcon, highIcon, clickIcon, marker, finish, yelp_request;
+var map, bounds, vm, largeInfoWindow,highIcon, clickIcon, marker, finish, yelp_request;
 var loc1 = {
     'lat': '',
     'lng': ''
@@ -12,6 +12,7 @@ var model1 = [];
 var ViewModel = function() {
     var menu = $('#menu');
     var sidebar = $('.sidebar')
+    //hamburgar menu
     menu.click(function() {
         sidebar.toggleClass('open');
     });
@@ -32,12 +33,14 @@ var ViewModel = function() {
             i++;
         };
         empty = true;
+        //run only if searchbar is not empty else reply to enter a valid location
         if (value != '') {
             yelp(value);
             yelp_request = setTimeout(function() {
                 for (var i = 0; i < model1.length; i++) {
                     self.restaurants.push(model1[i]);
                 }
+                //new instance of bounds to dynamically reset bounds everytime for a new location
                 bounds = new google.maps.LatLngBounds();
 
                 add_markers_to_map(model1);
@@ -50,11 +53,13 @@ var ViewModel = function() {
         self.currentrestaurant = current;
         populateInfoWindow(markers[self.currentrestaurant.id], largeInfoWindow);
     };
+    // filter restaurants acoording to search and display markers accordingly
     this.search = function(value) {
         self.restaurants.removeAll();
         for (var i in model1) {
             markers[i].setMap(null);
             if (model1[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                //push restaurants matched to value and corresponding markers
                 self.restaurants.push(model1[i]);
                 markers[i].setMap(map);
             }
@@ -80,9 +85,9 @@ function initMap() {
     });
 
     largeInfoWindow = new google.maps.InfoWindow();
-    defaultIcon = makeMarkerIcon('a82848');
     highlightedIcon = makeMarkerIcon('ed4b74');
     clickedIcon = makeMarkerIcon('f79336');
+    //referemce from code pen to resize on window resize
     google.maps.event.addDomListener(window, "resize", function() {
         var center = map.getCenter();
         google.maps.event.trigger(map, "resize");
