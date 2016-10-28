@@ -32,6 +32,7 @@ var ViewModel = function(){
             model1.pop();
             i++;
         };
+        // i can still see my previous contents here despite of emptying it but even though length is 20 only 10 markers remain in my array
         console.log(markers[9]);
         console.log(model1[9]);
         if(value!= '') {
